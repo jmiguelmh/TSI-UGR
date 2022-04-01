@@ -18,6 +18,10 @@ public class AgenteBFS extends AbstractPlayer {
 	ArrayList<Vector2d> muros;
 	ArrayList<ACTIONS> ruta;
 	ArrayList<Observation> grid[][];
+	ArrayList<Vector2d> visitados;
+	
+	// Parametros a medir
+	int nodosExpandidos = 0;
 
 	// Struct nodo
 	public static class nodo {
@@ -36,7 +40,6 @@ public class AgenteBFS extends AbstractPlayer {
 	ArrayList<ACTIONS> BFS(nodo inicial, nodo destino) {
 		ArrayList<ACTIONS> ruta = new ArrayList<ACTIONS>();
 		Queue<nodo> cola = new LinkedList<nodo>();
-		ArrayList<Vector2d> visitados = new ArrayList<Vector2d>();
 		cola.add(inicial);
 		visitados.add(inicial.posicion);
 		
@@ -52,6 +55,8 @@ public class AgenteBFS extends AbstractPlayer {
 				}
 				break;
 			}
+			
+			nodosExpandidos++;
 			
 			// Casilla arriba
 			nodo arriba = new nodo();
@@ -142,6 +147,7 @@ public class AgenteBFS extends AbstractPlayer {
 		
 		ruta = new ArrayList<ACTIONS>();
 		grid = stateObs.getObservationGrid();
+		visitados = new ArrayList<Vector2d>();
 	}
 
 	// Metodo act
@@ -155,7 +161,15 @@ public class AgenteBFS extends AbstractPlayer {
 		destino.posicion = new Vector2d(portal.x, portal.y);
 
 		if(ruta.isEmpty())
+		{
 			ruta = BFS(inicio, destino);
+			
+			System.out.println("Ruta: " + ruta);
+			System.out.println("Tamaño de la ruta: " + ruta.size());
+			System.out.println("Tiempo de cálculo: " + elapsedTimer);
+			System.out.println("Nodos expandidos: " + nodosExpandidos);
+			System.out.println("Nodos en memoria: " + visitados.size());
+		}
 		
 		// La ruta esta al reves, se lee del final al inicio
 		accion = ruta.get(ruta.size() - 1);

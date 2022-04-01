@@ -1,8 +1,6 @@
 package tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import core.game.Observation;
 import core.game.StateObservation;
@@ -16,117 +14,105 @@ public class AgenteDFS extends AbstractPlayer {
 	Vector2d fescala;
 	Vector2d portal;
 	ArrayList<Vector2d> muros;
-	Queue<ACTIONS> ruta;
+	ArrayList<ACTIONS> ruta;
 	ArrayList<Observation> grid[][];
-	ArrayList<Vector2d> visitados; // TODO pasarlo como copia a las llamadas recursivas, hay posiciones repetidas
-	int nodosExpandidos;
+	ArrayList<Vector2d> visitados;
+	
+	// Parametros a medir
+	int nodosExpandidos = 0;
+	int nodosMemoria = 0;
 	
 	// Struct nodo
 	public static class nodo {
 		public Vector2d posicion;
-		public Queue<ACTIONS> secuencia;
+		public ACTIONS accion;
 		public nodo padre;
 
 		public nodo() {
 			posicion = new Vector2d(0, 0);
-			secuencia = new LinkedList<ACTIONS>();
+			accion = ACTIONS.ACTION_NIL;
 			padre = null;
 		}
 	}
 	
 	// Pathfinding profundidad
-		void DFS(nodo inicial, nodo destino, StateObservation stateObs) {
-			visitados.add(inicial.posicion);
-			inicial.padre = null;
-			DFS_search(inicial, destino, stateObs);
+		void DFS(nodo inicial, nodo destino) {
+			if(!visitados.contains(inicial.posicion))
+				visitados.add(inicial.posicion);
+			DFS_search(inicial, destino);
+			//visitados.remove(inicial.posicion);
 		}
 		
-		void DFS_search(nodo actual, nodo destino, StateObservation stateObs)
-		{
+		void DFS_search(nodo actual, nodo destino) {
 			if(actual.posicion.x == destino.posicion.x && actual.posicion.y == destino.posicion.y)
 			{
-				ruta = actual.secuencia;
-			}
-			else
-			{				
+				while(actual.padre != null)
+				{
+					ruta.add(actual.accion);
+					actual = actual.padre;
+				}
+				nodosMemoria = visitados.size();
+			} else {
+				nodosExpandidos++;
+				
 				// Casilla arriba
 				nodo arriba = new nodo();
-				arriba.posicion = new Vector2d(actual.posicion);
-				arriba.posicion.y -= 1;
-				
-				// No es un muro y no ha sido visitado
-				if(!muros.contains(arriba.posicion) && !visitados.contains(arriba.posicion))
+				arriba.posicion = new Vector2d(actual.posicion.x, actual.posicion.y - 1);
+				if(!visitados.contains(arriba.posicion) && !muros.contains(arriba.posicion))
 				{
-					// Evitar pinchos
-					if(grid[(int) arriba.posicion.x][(int) arriba.posicion.y].isEmpty() || grid[(int) arriba.posicion.x][(int) arriba.posicion.y].get(0).itype == 3)
-					{
-						arriba.padre = actual;
-						visitados.add(arriba.posicion);
-						arriba.secuencia = new LinkedList<ACTIONS>(arriba.padre.secuencia);
-						arriba.secuencia.add(ACTIONS.ACTION_UP);
-						nodosExpandidos++;
-						DFS(arriba, destino, stateObs);
-					}
+					if(arriba.posicion.x < grid.length && arriba.posicion.y < grid[(int) arriba.posicion.x].length)
+						if(grid[(int) arriba.posicion.x][(int) arriba.posicion.y].isEmpty() || grid[(int) arriba.posicion.x][(int) arriba.posicion.y].get(0).itype == 3)
+						{
+							arriba.accion = ACTIONS.ACTION_UP;
+							arriba.padre = actual;
+							visitados.add(arriba.posicion);
+							DFS(arriba, destino);
+						}
 				}
 				
 				// Casilla abajo
 				nodo abajo = new nodo();
-				abajo.posicion = new Vector2d(actual.posicion);
-				abajo.posicion.y += 1;
-				
-				// No es un muro y no ha sido visitado
-				if(!muros.contains(abajo.posicion) && !visitados.contains(abajo.posicion))
+				abajo.posicion = new Vector2d(actual.posicion.x, actual.posicion.y + 1);
+				if(!visitados.contains(abajo.posicion) && !muros.contains(abajo.posicion))
 				{
-					// Evitar pinchos
-					if(grid[(int) abajo.posicion.x][(int) abajo.posicion.y].isEmpty() || grid[(int) abajo.posicion.x][(int) abajo.posicion.y].get(0).itype == 3)
-					{
-						abajo.padre = actual;
-						visitados.add(abajo.posicion);
-						abajo.secuencia = new LinkedList<ACTIONS>(abajo.padre.secuencia);
-						abajo.secuencia.add(ACTIONS.ACTION_DOWN);
-						nodosExpandidos++;
-						DFS(abajo, destino, stateObs);
-					}
+					if(abajo.posicion.x < grid.length && abajo.posicion.y < grid[(int) abajo.posicion.x].length)
+						if(grid[(int) abajo.posicion.x][(int) abajo.posicion.y].isEmpty() || grid[(int) abajo.posicion.x][(int) abajo.posicion.y].get(0).itype == 3)
+						{
+							abajo.accion = ACTIONS.ACTION_DOWN;
+							abajo.padre = actual;
+							visitados.add(abajo.posicion);
+							DFS(abajo, destino);
+						}
 				}
 				
 				// Casilla izquierda
 				nodo izquierda = new nodo();
-				izquierda.posicion = new Vector2d(actual.posicion);
-				izquierda.posicion.x -= 1;
-				
-				// No es un muro y no ha sido visitado
-				if(!muros.contains(izquierda.posicion) && !visitados.contains(izquierda.posicion))
+				izquierda.posicion = new Vector2d(actual.posicion.x - 1, actual.posicion.y);
+				if(!visitados.contains(izquierda.posicion) && !muros.contains(izquierda.posicion))
 				{
-					// Evitar pinchos
-					if(grid[(int) izquierda.posicion.x][(int) izquierda.posicion.y].isEmpty() || grid[(int) izquierda.posicion.x][(int) izquierda.posicion.y].get(0).itype == 3)
-					{
-						izquierda.padre = actual;
-						visitados.add(izquierda.posicion);
-						izquierda.secuencia = new LinkedList<ACTIONS>(izquierda.padre.secuencia);
-						izquierda.secuencia.add(ACTIONS.ACTION_LEFT);
-						nodosExpandidos++;
-						DFS(izquierda, destino, stateObs);
-					}
+					if(izquierda.posicion.x < grid.length && izquierda.posicion.y < grid[(int) izquierda.posicion.x].length)
+						if(grid[(int) izquierda.posicion.x][(int) izquierda.posicion.y].isEmpty() || grid[(int) izquierda.posicion.x][(int) izquierda.posicion.y].get(0).itype == 3)
+						{
+							izquierda.accion = ACTIONS.ACTION_LEFT;
+							izquierda.padre = actual;
+							visitados.add(izquierda.posicion);
+							DFS(izquierda, destino);
+						}
 				}
 				
 				// Casilla derecha
 				nodo derecha = new nodo();
-				derecha.posicion = new Vector2d(actual.posicion);
-				derecha.posicion.x += 1;
-				
-				// No es un muro y no ha sido visitado
-				if(!muros.contains(derecha.posicion) && !visitados.contains(derecha.posicion))
+				derecha.posicion = new Vector2d(actual.posicion.x + 1, actual.posicion.y);
+				if(!visitados.contains(derecha.posicion) && !muros.contains(derecha.posicion))
 				{
-					// Evitar pinchos
-					if(grid[(int) derecha.posicion.x][(int) derecha.posicion.y].isEmpty() || grid[(int) derecha.posicion.x][(int) derecha.posicion.y].get(0).itype == 3)
-					{
-						derecha.padre = actual;
-						visitados.add(derecha.posicion);
-						derecha.secuencia = new LinkedList<ACTIONS>(derecha.padre.secuencia);
-						derecha.secuencia.add(ACTIONS.ACTION_RIGHT);
-						nodosExpandidos++;
-						DFS(derecha, destino, stateObs);
-					}
+					if(derecha.posicion.x < grid.length && derecha.posicion.y < grid[(int) derecha.posicion.x].length)
+						if(grid[(int) derecha.posicion.x][(int) derecha.posicion.y].isEmpty() || grid[(int) derecha.posicion.x][(int) derecha.posicion.y].get(0).itype == 3)
+						{					
+							derecha.accion = ACTIONS.ACTION_RIGHT;
+							derecha.padre = actual;
+							visitados.add(derecha.posicion);
+							DFS(derecha, destino);
+						}
 				}
 			}
 		}
@@ -153,10 +139,9 @@ public class AgenteDFS extends AbstractPlayer {
 			        muros.add(muro);
 			}
 			
-			ruta = new LinkedList<ACTIONS>();
+			ruta = new ArrayList<ACTIONS>();
 			grid = stateObs.getObservationGrid();
 			visitados = new ArrayList<Vector2d>();
-			nodosExpandidos = 0;
 		}
 
 	
@@ -172,15 +157,18 @@ public class AgenteDFS extends AbstractPlayer {
 			destino.posicion = portal;
 			if(ruta.isEmpty())
 			{
-				DFS(inicio, destino, stateObs);
-	
+				DFS(inicio, destino);
+				
 				System.out.println("Ruta: " + ruta);
 				System.out.println("Tamaño de la ruta: " + ruta.size());
+				System.out.println("Tiempo de cálculo: " + elapsedTimer);
 				System.out.println("Nodos expandidos: " + nodosExpandidos);
-				System.out.println("Nodos en memoria: " + visitados.size());
+				System.out.println("Nodos en memoria: " + nodosMemoria);
 			}
 
-			accion = ruta.remove();
+			// La ruta esta al reves, se lee del final al inicio
+			accion = ruta.get(ruta.size() - 1);
+			ruta.remove(ruta.size() - 1);
 			return accion;
 		}
 }
