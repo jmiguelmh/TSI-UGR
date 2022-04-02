@@ -1,6 +1,7 @@
 package tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import core.game.Observation;
 import core.game.StateObservation;
@@ -151,24 +152,25 @@ public class AgenteDFS extends AbstractPlayer {
 			ACTIONS accion = ACTIONS.ACTION_NIL;
 			
 			nodo inicio = new nodo();
-			inicio.posicion = avatar;
-			
+			inicio.posicion = new Vector2d(avatar.x, avatar.y);
 			nodo destino = new nodo();
-			destino.posicion = portal;
+			destino.posicion = new Vector2d(portal.x, portal.y);
+
 			if(ruta.isEmpty())
 			{
 				DFS(inicio, destino);
+				
+				// La lista esta al reves, le damos la vuelta
+				Collections.reverse(ruta);
 				
 				System.out.println("Ruta: " + ruta);
 				System.out.println("Tamaño de la ruta: " + ruta.size());
 				System.out.println("Tiempo de cálculo: " + elapsedTimer);
 				System.out.println("Nodos expandidos: " + nodosExpandidos);
-				System.out.println("Nodos en memoria: " + nodosMemoria);
+				System.out.println("Nodos en memoria: " + visitados.size());
 			}
-
-			// La ruta esta al reves, se lee del final al inicio
-			accion = ruta.get(ruta.size() - 1);
-			ruta.remove(ruta.size() - 1);
+			
+			accion = ruta.remove(0);
 			return accion;
 		}
 }

@@ -1,6 +1,7 @@
 package tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -37,8 +38,7 @@ public class AgenteBFS extends AbstractPlayer {
 	}
 
 	// Pathfinding anchura
-	ArrayList<ACTIONS> BFS(nodo inicial, nodo destino) {
-		ArrayList<ACTIONS> ruta = new ArrayList<ACTIONS>();
+	void BFS(nodo inicial, nodo destino) {
 		Queue<nodo> cola = new LinkedList<nodo>();
 		cola.add(inicial);
 		visitados.add(inicial.posicion);
@@ -118,9 +118,6 @@ public class AgenteBFS extends AbstractPlayer {
 					}
 			}
 		}
-		
-		
-		return ruta;
 	}
 
 	// Constructor
@@ -162,7 +159,10 @@ public class AgenteBFS extends AbstractPlayer {
 
 		if(ruta.isEmpty())
 		{
-			ruta = BFS(inicio, destino);
+			BFS(inicio, destino);
+			
+			// La lista esta al reves, le damos la vuelta
+			Collections.reverse(ruta);
 			
 			System.out.println("Ruta: " + ruta);
 			System.out.println("Tamaño de la ruta: " + ruta.size());
@@ -171,9 +171,7 @@ public class AgenteBFS extends AbstractPlayer {
 			System.out.println("Nodos en memoria: " + visitados.size());
 		}
 		
-		// La ruta esta al reves, se lee del final al inicio
-		accion = ruta.get(ruta.size() - 1);
-		ruta.remove(ruta.size() - 1);
+		accion = ruta.remove(0);
 		return accion;
 	}
 }
