@@ -46,6 +46,7 @@ public class AgenteBFS extends AbstractPlayer {
 		while(!cola.isEmpty())
 		{
 			nodo actual = cola.remove();
+			nodosExpandidos++;
 			if(actual.posicion.x == destino.posicion.x && actual.posicion.y == destino.posicion.y)
 			{
 				while(actual.padre != null)
@@ -56,7 +57,6 @@ public class AgenteBFS extends AbstractPlayer {
 				break;
 			}
 			
-			nodosExpandidos++;
 			
 			// Casilla arriba
 			nodo arriba = new nodo();

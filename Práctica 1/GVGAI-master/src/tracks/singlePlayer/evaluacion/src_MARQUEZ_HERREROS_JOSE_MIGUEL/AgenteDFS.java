@@ -45,6 +45,7 @@ public class AgenteDFS extends AbstractPlayer {
 		}
 		
 		void DFS_search(nodo actual, nodo destino) {
+			nodosExpandidos++;
 			if(actual.posicion.x == destino.posicion.x && actual.posicion.y == destino.posicion.y)
 			{
 				while(actual.padre != null)
@@ -54,7 +55,6 @@ public class AgenteDFS extends AbstractPlayer {
 				}
 				nodosMemoria = visitados.size();
 			} else {
-				nodosExpandidos++;
 				
 				// Casilla arriba
 				nodo arriba = new nodo();
