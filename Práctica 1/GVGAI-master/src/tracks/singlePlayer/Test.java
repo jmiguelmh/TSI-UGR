@@ -19,14 +19,10 @@ public class Test {
 		String doNothingController = "tracks.singlePlayer.simple.doNothing.Agent";
 		String sampleOneStepController = "tracks.singlePlayer.simple.sampleonesteplookahead.Agent";
 		String sampleFlatMCTSController = "tracks.singlePlayer.simple.greedyTreeSearch.Agent";
-		
-		String agenteCamello = "tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL.myAgent_Camel";
-		
+				
 		String agenteBFS = "tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL.AgenteBFS";
 		String agenteDFS = "tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL.AgenteDFS";
 		String agenteAStar = "tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL.AgenteAStar";
-		String agenteIDAStar = "tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL.AgenteIDAStar";
-		String agenteRTAStar = "tracks.singlePlayer.evaluacion.src_MARQUEZ_HERREROS_JOSE_MIGUEL.AgenteRTAStar";
 		
 		String sampleMCTSController = "tracks.singlePlayer.advanced.sampleMCTS.Agent";
         String sampleRSController = "tracks.singlePlayer.advanced.sampleRS.Agent";
