@@ -18,18 +18,31 @@ public class AgenteBFS extends AbstractPlayer {
 	Vector2d portal;
 	ArrayList<Vector2d> muros;
 	ArrayList<ACTIONS> ruta;
+	
+	// ArrayList donde se almacena la información de todas las casillas
+	// del mapa, se utiliza para comprobar si en una casilla hay una trampa
 	ArrayList<Observation> grid[][];
+	
+	// ArrayList donde se van a almacenar las casillas visitadas,
+	// es la que se usará en el algoritmo de búsqueda para comprobar
+	// si una casilla se ha visitado previamente, también se utilizará
+	// para medir el consumo de memoria
 	ArrayList<Vector2d> visitados;
 	
 	// Parametros a medir
 	int nodosExpandidos = 0;
 
-	// Struct nodo
+	// Estructura nodo que se va a utilizar
+	// Esta estructura contiene la siguiente información:
+	// posicion de la casilla, la última acción que se realizó para llegar
+	// a ese nodo, esto es para la facilitar la construcción de la ruta
+	// recorriendo los padres y un nodo padre.
 	public static class nodo {
 		public Vector2d posicion;
 		public ACTIONS accion;
 		public nodo padre;
-
+		
+		// Constructor por defecto de nodo
 		public nodo() {
 			posicion = new Vector2d(0, 0);
 			accion = ACTIONS.ACTION_NIL;
@@ -39,16 +52,24 @@ public class AgenteBFS extends AbstractPlayer {
 
 	// Pathfinding anchura
 	void BFS(nodo inicial, nodo destino) {
+		// Utilizamos una cola para recorrer los nodos en anchura, metemos el nodo inicial
 		Queue<nodo> cola = new LinkedList<nodo>();
 		cola.add(inicial);
+		
+		// Lo añadidos a visitados para no volver a explorarlo
 		visitados.add(inicial.posicion);
 		
 		while(!cola.isEmpty())
 		{
+			// Sacamos el primer nodo de la cola
 			nodo actual = cola.remove();
+			// Un nodo más explorado
 			nodosExpandidos++;
+			
+			// Comprobamos si es el nodo destino
 			if(actual.posicion.x == destino.posicion.x && actual.posicion.y == destino.posicion.y)
 			{
+				// Reconstruimos la ruta a través de los padres
 				while(actual.padre != null)
 				{
 					ruta.add(actual.accion);
@@ -57,6 +78,13 @@ public class AgenteBFS extends AbstractPlayer {
 				break;
 			}
 			
+			// A partir del nodo obtenido al frente de la cola exploramos en todas las direcciones
+			// Se sigue la prioridad de exploración: arriba, abajo, izquierda, derecha
+			// Para cada nodo a expandir se crea un nuevo nodo con el nombre de la direccion en la
+			// que vamos a expandir y le asignamos toda la información necesaria (nueva posición, 
+			// acción requerida y el padre). Mediante unos if comprobamos si se puede expandir en esa
+			// dirección (no se haya visitado, no se un muro y no sea una trampa). Al final se añade 
+			// a la cola y a visitados.
 			
 			// Casilla arriba
 			nodo arriba = new nodo();
@@ -122,17 +150,21 @@ public class AgenteBFS extends AbstractPlayer {
 
 	// Constructor
 	public AgenteBFS(StateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
-
+		
+		// Obtención de la escala del mundo
 		fescala = new Vector2d(stateObs.getWorldDimension().width / stateObs.getObservationGrid().length,
 				stateObs.getWorldDimension().height / stateObs.getObservationGrid()[0].length);
-
+		
+		// Obtención de la posición del portal (meta)
 		ArrayList<Observation>[] portales = stateObs.getPortalsPositions();
 		portal = portales[0].get(0).position;
 		portal.x = Math.floor(portal.x / fescala.x);
 		portal.y = Math.floor(portal.y / fescala.y);
 		
+		// Obtención de la posición del avatar
 		avatar =  new Vector2d(stateObs.getAvatarPosition().x / fescala.x, stateObs.getAvatarPosition().y / fescala.y);
 		
+		// Inicialización de un ArrayList que contiene las posiciones de todos los muros del mapa
 		muros = new ArrayList<Vector2d>();
 		ArrayList<Observation>[] murosAux = stateObs.getImmovablePositions();
 		for(int i=0; i<murosAux[0].size(); i++) {
@@ -142,6 +174,7 @@ public class AgenteBFS extends AbstractPlayer {
 		        muros.add(muro);
 		}
 		
+		// Inicialización de ciertas estructuras
 		ruta = new ArrayList<ACTIONS>();
 		grid = stateObs.getObservationGrid();
 		visitados = new ArrayList<Vector2d>();
@@ -150,20 +183,24 @@ public class AgenteBFS extends AbstractPlayer {
 	// Metodo act
 	@Override
 	public ACTIONS act(StateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
+		// Acción por defecto
 		ACTIONS accion = ACTIONS.ACTION_NIL;
 		
+		// Creamos los nodos incio y destino con sus valores asociados
 		nodo inicio = new nodo();
 		inicio.posicion = new Vector2d(avatar.x, avatar.y);
 		nodo destino = new nodo();
 		destino.posicion = new Vector2d(portal.x, portal.y);
-
+		
+		// El cálculo de la ruta solo se debe a ejecutar una vez en cada ejecución del método act
 		if(ruta.isEmpty())
 		{
 			BFS(inicio, destino);
 			
-			// La lista esta al reves, le damos la vuelta
+			// La lista esta al reves porque la reconstruimos a través de los nodos padre, le damos la vuelta
 			Collections.reverse(ruta);
 			
+			// Mostramos los resultados por pantalla
 			System.out.println("Ruta: " + ruta);
 			System.out.println("Tamaño de la ruta: " + ruta.size());
 			System.out.println("Tiempo de cálculo: " + elapsedTimer);
@@ -171,6 +208,7 @@ public class AgenteBFS extends AbstractPlayer {
 			System.out.println("Nodos en memoria: " + visitados.size());
 		}
 		
+		// Obtenemos la acción de la ruta calculada
 		accion = ruta.remove(0);
 		return accion;
 	}
