@@ -1,4 +1,4 @@
-# TSI-UGR
+# Técnicas de los Sistemas Inteligentes
 Repositorio con el contenido de las prácticas de la asignatura Técnicas de los Sistemas Inteligentes (rama de Computación y Sistemas Inteligentes) de la Universidad de Granada.
 
 ## Práctica 1
