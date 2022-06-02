@@ -1,20 +1,22 @@
-(define (domain ejercicio4)
+(define (domain ejercicio5)
 
     (:requirements :strips :adl)
 
     (:types
         entidad localizacion recurso - object
-        unidad edificio - entidad
+        unidad edificio investigacion - entidad
 
         tipoUnidad - unidad
         tipoEdificio - edificio
         tipoRecurso - recurso
+        tipoInvestigacion - investigacion
     )
 
     (:constants
         VCE Marine Soldado - tipoUnidad
-        CentroDeMando Barracones Extractor - tipoEdificio
+        CentroDeMando Barracones Extractor BahiaDeIngenieria - tipoEdificio
         Mineral Gas - tipoRecurso
+        SoldadoUniversal - tipoInvestigacion
     )
 
     (:predicates
@@ -27,6 +29,8 @@
         (esTipoEdificio ?e - edificio ?te - tipoEdificio)
         (libre ?u - unidad)
         (recursosNecesarios ?e - entidad ?tr - tipoRecurso)
+        (esTipoInvestivacion ?i - investigacion ?ti - tipoInvestigacion)
+        (investigacionRealizada ?i - investigacion)
     )
 
     ;Acciones
@@ -124,6 +128,7 @@
                 (and
                     (extrayendo Mineral)
                     (extrayendo Gas)
+                    (investigacionRealizada SoldadoUniversal)
                 )
             )
 
@@ -137,14 +142,6 @@
                     (esTipoUnidad ?u Soldado)
                 )
             )
-
-            (imply (esTipoEdificio ?e Extractor)
-                (and
-                    (not (esTipoUnidad ?u VCE))
-                    (not (esTipoUnidad ?u Soldado))
-                    (not (esTipoUnidad ?u Marine))
-                )
-            )
             
         )
         :effect (and
@@ -152,4 +149,24 @@
             (libre ?u)
         )
     )
+
+    (:action Investigar
+        :parameters (?e - edificio ?i - investigacion)
+        :precondition (and
+            (not (investigacionRealizada ?i))
+            (esTipoEdificio ?e BahiaDeIngenieria)
+            (edificioConstruido ?e)
+            (imply (esTipoInvestivacion ?i SoldadoUniversal)
+                (and
+                    (extrayendo Mineral)
+                    (extrayendo Gas)
+                )
+            )
+
+        )
+        :effect (and
+            (investigacionRealizada ?i)
+        )
+    )
+    
 )

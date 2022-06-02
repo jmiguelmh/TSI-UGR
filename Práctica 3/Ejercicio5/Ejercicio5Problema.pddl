@@ -1,9 +1,10 @@
-(define (problem ejercicio4)
-    (:domain ejercicio4)
+(define (problem ejercicio5)
+    (:domain ejercicio5)
     (:objects
         VCE1 VCE2 VCE3 Soldado1 Marine1 Marine2 - tipoUnidad
-        CentroDeMando1 Extractor1 Barracones1 - tipoEdificio
+        CentroDeMando1 Extractor1 Barracones1 BahiaDeIngenieria1 - tipoEdificio
         LOC11 LOC12 LOC13 LOC14 LOC21 LOC22 LOC23 LOC24 LOC31 LOC32 LOC33 LOC34 LOC44 - localizacion
+        Investigacion1 - tipoInvestigacion
     )
 
     (:init
@@ -60,17 +61,23 @@
         (esTipoEdificio CentroDeMando1 CentroDeMando)
         (esTipoEdificio Extractor1 Extractor)
         (esTipoEdificio Barracones1 Barracones)
+        (esTipoEdificio BahiaDeIngenieria1 BahiaDeIngenieria)
+
+        (esTipoInvestivacion Investigacion1 SoldadoUniversal)
 
         (recursosNecesarios Extractor1 Mineral)
         (recursosNecesarios Barracones1 Mineral)
         (recursosNecesarios Barracones1 Gas)
+        (recursosNecesarios BahiaDeIngenieria1 Mineral)
+        (recursosNecesarios BahiaDeIngenieria1 Gas)
 
         (recursosNecesarios Soldado1 Mineral)
         (recursosNecesarios Soldado1 Gas)
-
         (recursosNecesarios Marine1 Mineral)
-
         (recursosNecesarios Marine2 Mineral)
+
+        (recursosNecesarios Investigacion1 Mineral)
+        (recursosNecesarios Investigacion1 Gas)
 
         (en VCE1 LOC11)
         
@@ -86,10 +93,11 @@
 
     (:goal
         (and
-            (en Marine1 LOC31)
-            (en Marine2 LOC24)
-            (en Soldado1 LOC12)
-            (en Barracones1 LOC32)
+            (en Marine1 LOC14)
+            (en Marine2 LOC14)
+            (en Soldado1 LOC14)
+            (en Barracones1 LOC14)
+            (en BahiaDeIngenieria1 LOC12)
         )
     )
 )
