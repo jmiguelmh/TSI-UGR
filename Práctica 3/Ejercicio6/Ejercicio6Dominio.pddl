@@ -1,6 +1,6 @@
 (define (domain ejercicio6)
 
-    (:requirements :strips :adl)
+    (:requirements :strips :adl :fluents)
 
     (:types
         entidad localizacion recurso - object
@@ -33,6 +33,10 @@
         (investigacionRealizada ?i - investigacion)
     )
 
+    (:functions
+        (coste)
+    )
+
     ;Acciones
     (:action Navegar
         :parameters (?u - unidad ?x ?y - localizacion)
@@ -44,6 +48,7 @@
         :effect (and
             (en ?u ?y)
             (not (en ?u ?x))
+            (increase (coste) 1)
         )
     )
 
@@ -68,6 +73,7 @@
         :effect (and
             (extrayendo ?r)
             (not (libre ?u))
+            (increase (coste) 1)
         )
     )
 
@@ -101,6 +107,7 @@
         :effect (and
             (edificioConstruido ?e)
             (en ?e ?x)
+            (increase (coste) 1)
         )
     )
 
@@ -141,12 +148,12 @@
                     (esTipoUnidad ?u Marine)
                     (esTipoUnidad ?u Soldado)
                 )
-            )
-            
+            )          
         )
         :effect (and
             (en ?u ?x)
             (libre ?u)
+            (increase (coste) 1)
         )
     )
 
@@ -166,6 +173,7 @@
         )
         :effect (and
             (investigacionRealizada ?i)
+            (increase (coste) 1)
         )
     )
     

@@ -89,6 +89,8 @@
         (asignarNodo Mineral LOC22)
         (asignarNodo Mineral LOC32)
         (asignarNodo Gas LOC44)
+
+        (= (coste) 0)
     )
 
     (:goal
@@ -98,6 +100,7 @@
             (en Soldado1 LOC14)
             (en Barracones1 LOC14)
             (en BahiaDeIngenieria1 LOC12)
+            (< (coste) 28)
         )
     )
 )
