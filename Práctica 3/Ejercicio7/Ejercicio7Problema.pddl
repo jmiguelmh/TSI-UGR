@@ -1,10 +1,9 @@
-(define (problem ejercicio6)
-    (:domain ejercicio6)
+(define (problem ejercicio7)
+    (:domain ejercicio7)
     (:objects
         VCE1 VCE2 VCE3 Soldado1 Marine1 Marine2 - tipoUnidad
-        CentroDeMando1 Extractor1 Barracones1 BahiaDeIngenieria1 - tipoEdificio
+        CentroDeMando1 Extractor1 Barracones1 - tipoEdificio
         LOC11 LOC12 LOC13 LOC14 LOC21 LOC22 LOC23 LOC24 LOC31 LOC32 LOC33 LOC34 LOC44 - localizacion
-        Investigacion1 - tipoInvestigacion
     )
 
     (:init
@@ -61,23 +60,6 @@
         (esTipoEdificio CentroDeMando1 CentroDeMando)
         (esTipoEdificio Extractor1 Extractor)
         (esTipoEdificio Barracones1 Barracones)
-        (esTipoEdificio BahiaDeIngenieria1 BahiaDeIngenieria)
-
-        (esTipoInvestivacion Investigacion1 SoldadoUniversal)
-
-        (recursosNecesarios Extractor1 Mineral)
-        (recursosNecesarios Barracones1 Mineral)
-        (recursosNecesarios Barracones1 Gas)
-        (recursosNecesarios BahiaDeIngenieria1 Mineral)
-        (recursosNecesarios BahiaDeIngenieria1 Gas)
-
-        (recursosNecesarios Soldado1 Mineral)
-        (recursosNecesarios Soldado1 Gas)
-        (recursosNecesarios Marine1 Mineral)
-        (recursosNecesarios Marine2 Mineral)
-
-        (recursosNecesarios Investigacion1 Mineral)
-        (recursosNecesarios Investigacion1 Gas)
 
         (en VCE1 LOC11)
         
@@ -90,17 +72,40 @@
         (asignarNodo Mineral LOC32)
         (asignarNodo Gas LOC44)
 
-        (= (coste) 0)
+        (= (topeRecurso Mineral) 60)
+        (= (topeRecurso Gas) 60)
+        (= (cantidadRecurso Mineral) 0)
+        (= (cantidadRecurso Gas) 0)
+
+        (= (recursosNecesarios Extractor1 Mineral) 10)
+        (= (recursosNecesarios Extractor1 Gas) 0)
+        
+        (= (recursosNecesarios Barracones1 Mineral) 30)
+        (= (recursosNecesarios Barracones1 Gas) 10)
+
+        (= (recursosNecesarios VCE2 Mineral) 5)
+        (= (recursosNecesarios VCE2 Gas) 0)
+        (= (recursosNecesarios VCE3 Mineral) 5)
+        (= (recursosNecesarios VCE3 Gas) 0)
+
+        (= (recursosNecesarios Marine1 Mineral) 10)
+        (= (recursosNecesarios Marine1 Gas) 15)
+        (= (recursosNecesarios Marine2 Mineral) 10)
+        (= (recursosNecesarios Marine2 Gas) 15)
+
+        (= (recursosNecesarios Soldado1 Mineral) 30)
+        (= (recursosNecesarios Soldado1 Gas) 30)
+
+        (= (unidadesExtrayendo Mineral) 0)
+        (= (unidadesExtrayendo Gas) 0)
     )
 
     (:goal
         (and
-            (en Marine1 LOC14)
-            (en Marine2 LOC14)
-            (en Soldado1 LOC14)
-            (en Barracones1 LOC14)
-            (en BahiaDeIngenieria1 LOC12)
-            (< (coste) 29)
+            (en Marine1 LOC31)
+            (en Marine2 LOC24)
+            (en Soldado1 LOC12)
+            (en Barracones1 LOC32)
         )
     )
 )
