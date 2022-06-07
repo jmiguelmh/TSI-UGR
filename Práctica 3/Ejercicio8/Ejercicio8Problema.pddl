@@ -1,5 +1,5 @@
-(define (problem ejercicio7)
-    (:domain ejercicio7)
+(define (problem ejercicio8)
+    (:domain ejercicio8)
     (:objects
         VCE1 VCE2 VCE3 Soldado1 Marine1 Marine2 - tipoUnidad
         CentroDeMando1 Extractor1 Barracones1 - tipoEdificio
@@ -100,6 +100,29 @@
         (= (unidadesExtrayendo Gas) 0)
 
         (= (cantidadRecolectada) 10)
+
+        (= (costeTiempo) 0)
+        (= (distanciaEntreLocalizaciones) 20)
+
+        (= (velocidadUnidad VCE1) 1)
+        (= (velocidadUnidad VCE2) 1)
+        (= (velocidadUnidad VCE3) 1)
+
+        (= (velocidadUnidad Marine1) 5)
+        (= (velocidadUnidad Marine2) 5)
+
+        (= (velocidadUnidad Soldado1) 10)
+
+        (= (tiempoPorEntidad Barracones1) 50)
+        (= (tiempoPorEntidad Extractor1) 20)
+        (= (tiempoPorEntidad VCE2) 10)
+        (= (tiempoPorEntidad VCE3) 10)
+        (= (tiempoPorEntidad Marine1) 20)
+        (= (tiempoPorEntidad Marine2) 20)
+        (= (tiempoPorEntidad Soldado1) 30)
+
+        (= (tiempoRecolectar) 5)
+
     )
 
     (:goal
@@ -108,6 +131,7 @@
             (en Marine2 LOC24)
             (en Soldado1 LOC12)
             (en Barracones1 LOC32)
+            (<= (costeTiempo) 483)
         )
     )
 )

@@ -1,6 +1,6 @@
-(define (domain ejercicio7)
+(define (domain ejercicio8)
 
-    (:requirements :strips :adl)
+    (:requirements :strips :adl :fluents)
 
     (:types
         entidad localizacion recurso - object
@@ -34,6 +34,11 @@
         (recursosNecesarios ?e - entidad ?r - recurso)
         (unidadesExtrayendo ?tr - tipoRecurso)
         (cantidadRecolectada)
+        (costeTiempo)
+        (distanciaEntreLocalizaciones)
+        (velocidadUnidad ?u)
+        (tiempoPorEntidad ?e)
+        (tiempoRecolectar)
     )
 
     ;Acciones
@@ -47,6 +52,13 @@
         :effect (and
             (en ?u ?y)
             (not (en ?u ?x))
+            (increase
+                (costeTiempo)
+                (/
+                    (distanciaEntreLocalizaciones)
+                    (velocidadUnidad ?u)
+                )
+            )
         )
     )
 
@@ -120,6 +132,11 @@
             (en ?e ?x)
             (decrease (cantidadRecurso Mineral) (recursosNecesarios ?e Mineral))
             (decrease (cantidadRecurso Gas) (recursosNecesarios ?e Gas))
+
+            (increase
+                (costeTiempo)
+                (tiempoPorEntidad ?e)
+            )
         )
     )
 
@@ -199,6 +216,11 @@
 
             (decrease (cantidadRecurso Mineral) (recursosNecesarios ?u Mineral))
             (decrease (cantidadRecurso Gas) (recursosNecesarios ?u Gas))
+
+            (increase
+                (costeTiempo)
+                (tiempoPorEntidad ?u)
+            )
         )
     )
 
@@ -233,6 +255,11 @@
                     (unidadesExtrayendo ?r)
                     (cantidadRecolectada)
                 )
+            )
+
+            (increase 
+                (costeTiempo)
+                (tiempoRecolectar)
             )
         )
     )
