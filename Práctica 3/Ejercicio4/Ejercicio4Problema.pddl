@@ -66,6 +66,8 @@
         (asignarNodo Gas LOC44)
 
         ; Se definen los recursos necesarios para cada unidad
+        (recursosNecesarios VCE2 Mineral)
+        (recursosNecesarios VCE3 Mineral)
         (recursosNecesarios Marine1 Mineral)
         (recursosNecesarios Marine2 Mineral)
         (recursosNecesarios Soldado1 Mineral)

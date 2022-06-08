@@ -114,6 +114,9 @@
             ; La unidad esta en la localizacion
             (en ?u ?x)
 
+            ; El edificio no ha sido construido anteriormente
+            (not (edificioConstruido ?e))
+
             ; No hay otro edificio construido en la localizacion
             (not (exists (?e - edificio)
                 (en ?e ?x))

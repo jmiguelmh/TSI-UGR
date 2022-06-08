@@ -114,6 +114,9 @@
             ; La unidad esta en la localizacion
             (en ?u ?x)
 
+            ; El edificio no ha sido construido anteriormente
+            (not (edificioConstruido ?e))
+
             ; Se dispone del recurso para construir el edificio
             (exists (?te - tipoEdificio)
                 (and
